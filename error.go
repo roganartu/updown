@@ -9,6 +9,14 @@ var (
 		msg:    "Invalid HTTP request type",
 		status: http.StatusMethodNotAllowed,
 	}
+	ErrMissingBody = JSONError{
+		msg:    "Request missing body",
+		status: http.StatusBadRequest,
+	}
+	ErrInvalidBody = JSONError{
+		msg:    "Request body invalid",
+		status: http.StatusBadRequest,
+	}
 )
 
 type JSONError struct {

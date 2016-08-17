@@ -3,10 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/roganartu/orbit"
 )
 
 const (
 	jsonErrString = `{"status":"error",message":"%s","status":%d}`
+	BUFFER_SIZE   = 1000000
+)
+
+var (
+	processor *orbit.Loop
 )
 
 type JSONHandler struct {
@@ -14,7 +21,14 @@ type JSONHandler struct {
 }
 
 func init() {
-	// set up the buffers
+	processor = orbit.New(
+		BUFFER_SIZE,
+		nil, // receiver
+		nil, // journaller
+		nil, // replicator
+		nil, // unmarshaller
+		nil, // executor
+	)
 }
 
 func main() {
