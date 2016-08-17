@@ -23,9 +23,9 @@ func main() {
 }
 
 func (h JSONHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	err := h.h(w, r)
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
 		switch e := err.(type) {
 		case *JSONError:
 			w.Write([]byte(fmt.Sprintf(jsonErrString, e.Error(), e.Status())))
