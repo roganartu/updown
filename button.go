@@ -29,7 +29,7 @@ func buttonHandler(w http.ResponseWriter, req *http.Request) error {
 		}
 	}
 
-	processor.Input <- b[:n]
+	processor.Input(b[:n])
 	w.Write(okResp)
 	return nil
 }
