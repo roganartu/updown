@@ -40,6 +40,7 @@ func init() {
 
 func main() {
 	http.Handle("/api/v1/button", JSONHandler{buttonHandler})
+	http.Handle("/api/v1/poll", JSONHandler{pollHandler})
 	http.ListenAndServe(":8080", nil)
 }
 
