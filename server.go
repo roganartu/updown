@@ -27,11 +27,11 @@ type JSONHandler struct {
 func init() {
 	processor = orbit.New(
 		BUFFER_SIZE,
-		nil, // receiver
-		nil, // journaler
-		nil, // replicator
-		nil, // unmarshaller
-		nil, // executor
+		nil,                 // receiver
+		requestJournaler,    // journaler
+		requestReplicator,   // replicator
+		requestUnmarshaller, // unmarshaller
+		requestExecutor,     // executor
 	)
 	processor.Start()
 

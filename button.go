@@ -20,48 +20,17 @@ func buttonHandler(w http.ResponseWriter, req *http.Request) error {
 		return ErrBadRequestType
 	}
 
-	b := []byte(`{"up":false}`)
-	n, err := readExpected(req.Body, b)
-	if err != nil {
+	b := make([]byte, 20)
+	limitReader := io.LimitReader(req.Body, 20)
+	n, err := limitReader.Read(b)
+	if err != nil && err != io.EOF {
 		return JSONError{
-			msg:    err.Error(),
+			msg:    "Invalid request",
 			status: http.StatusBadRequest,
 		}
 	}
 
-	processor.Input(b[:n])
+	processor.Input(b[0:n])
 	w.Write(okResp)
 	return nil
-}
-
-// readExpected reads the body up to a max of len(b) bytes.
-//
-// This is to prevent huge bodies being sent and processed.
-func readExpected(body io.ReadCloser, b []byte) (int, error) {
-	total := 0
-	for {
-		n, err := body.Read(b)
-		total += n
-
-		if total > len(b) {
-			return 0, ErrInvalidBody
-		}
-
-		if err != nil {
-			if err != io.EOF {
-				return 0, ErrInvalidBody
-			}
-
-			if total == 0 {
-				return 0, ErrMissingBody
-			}
-
-			if total < len(b)-1 {
-				return 0, ErrInvalidBody
-			}
-
-			break
-		}
-	}
-	return total, nil
 }
