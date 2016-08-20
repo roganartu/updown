@@ -15,13 +15,18 @@ func requestUnmarshaller(p orbit.Processor, ids []uint64) {
 			continue
 		}
 
-		if b, ok := elem.GetMarshalled().([]byte); ok {
+		if m, ok := elem.GetMarshalled().(*Message); ok {
+			if m == nil {
+				continue
+			}
+
 			var press Press
-			err := json.Unmarshal(b, &press)
+			err := json.Unmarshal(m.Body, &press)
 			if err != nil {
 				continue
 			}
-			elem.SetUnmarshalled(press)
+			m.Press = &press
+			elem.SetUnmarshalled(m)
 		}
 	}
 	p.SetUnmarshallerIndex(ids[len(ids)-1])

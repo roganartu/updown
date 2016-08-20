@@ -31,8 +31,7 @@ func init() {
 		requestJournaler,    // journaler
 		requestReplicator,   // replicator
 		requestUnmarshaller, // unmarshaller
-		requestExecutor,     // executor
-	)
+		requestExecutor)     // executor
 	processor.Start()
 
 	logger = log.New(os.Stdout, "", 8192)
@@ -67,7 +66,8 @@ func (h JSONHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.URL.RawQuery != "" {
 		path += "?" + r.URL.RawQuery
 	}
-	logger.Infof("%s %s %d - %d.%06d\n",
+	logger.Infof("%s %s %s %d - %d.%06d\n",
+		r.RemoteAddr,
 		r.Method,
 		path,
 		status,

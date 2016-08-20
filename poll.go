@@ -7,7 +7,8 @@ import (
 )
 
 type Status struct {
-	Count *big.Int `json:"count"`
+	Value           *big.Int `json:"value"`
+	TotalClickCount *big.Int `json:"total_click_count"`
 }
 
 func pollHandler(w http.ResponseWriter, req *http.Request) error {
@@ -18,7 +19,8 @@ func pollHandler(w http.ResponseWriter, req *http.Request) error {
 	}
 
 	resp := &Status{
-		Count: count,
+		Value:           count,
+		TotalClickCount: stats.TotalRequests,
 	}
 
 	return json.NewEncoder(w).Encode(resp)

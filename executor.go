@@ -21,12 +21,13 @@ func requestExecutor(p orbit.Processor, ids []uint64) {
 			continue
 		}
 
-		if press, ok := elem.GetUnmarshalled().(Press); ok {
-			if press.Up {
+		if m, ok := elem.GetUnmarshalled().(*Message); ok {
+			if m.Press.Up {
 				count.Add(count, one)
 			} else {
 				count.Sub(count, one)
 			}
+			metrics.Input(m)
 		}
 	}
 	p.SetExecutorIndex(ids[len(ids)-1])
